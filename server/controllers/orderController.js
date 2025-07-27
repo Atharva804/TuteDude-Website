@@ -70,6 +70,25 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+const getOrdersByCustomer = async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    const orders = await Order.find({ customer: customerId })
+      .populate("items.product", "name price category")
+      .populate("vendor", "name")
+      .populate("review")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, count: orders.length, orders });
+  } catch (error) {
+    console.error("Error fetching customer orders:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch customer orders" });
+  }
+};
+
 const getOrderById = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
@@ -81,6 +100,25 @@ const getOrderById = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to fetch order", error: err.message });
+  }
+};
+
+const getOrdersByVendor = async (req, res) => {
+  try {
+    const { vendorId } = req.params;
+
+    const orders = await Order.find({ vendor: vendorId })
+      .populate("items.product", "name price category")
+      .populate("customer", "name email") // populate customer info
+      .populate("review") // optional
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, count: orders.length, orders });
+  } catch (error) {
+    console.error("Error fetching vendor orders:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch vendor orders" });
   }
 };
 
@@ -117,6 +155,8 @@ module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
+  getOrdersByVendor,
+  getOrdersByCustomer,
   updateOrderStatus,
   deleteOrder,
 };
