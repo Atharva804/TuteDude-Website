@@ -9,14 +9,14 @@ const {
   deleteSupplier,
 } = require("../controllers/VendorProfileController");
 
-router.post("/suppliers", RegisterAsSupplier);
+router.post("/VendorProfile", RegisterAsSupplier);
 
-router.get("/suppliers", getAllSuppliers);
+router.get("/VendorProfile", getAllSuppliers);
 
-router.get("/suppliers/:user_id", getSupplierById);
+router.get("/VendorProfile/:user_id", getSupplierById);
 
-router.put("/suppliers/:user_id", updateSupplier);
+router.put("/VendorProfile/:user_id", updateSupplier);
 
-router.delete("/suppliers/:user_id", deleteSupplier);
+router.delete("/VendorProfile/:user_id", deleteSupplier);
 
 module.exports = router;
